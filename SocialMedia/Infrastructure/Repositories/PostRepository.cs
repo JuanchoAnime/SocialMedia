@@ -9,17 +9,25 @@
 
     public class PostRepository: IPostRepository
     {
+       private readonly IEnumerable<Post> list = Enumerable.Range(1, 10).Select(x => new Post()
+       {
+           IdPost = x,
+           Description = $"Description {x}",
+           Date = DateTime.Now.AddDays(x),
+           Image = $"http://miapi.com/image/{x}",
+           UserId = x * 2
+       });
+
         public async Task<IEnumerable<Post>> Get() 
         {
             await Task.Delay(1);
-                
-            return Enumerable.Range(1, 10).Select( x => new Post() { 
-                IdPost = x,
-                Description = $"Description {x}",
-                Date = DateTime.Now.AddDays(x),
-                Image = $"http://miapi.com/image/{x}",
-                UserId = x*2
-            });
+            return list;
+        }
+
+        public async  Task<Post> GetById(int id)
+        {
+            await Task.Delay(1);
+            return list.FirstOrDefault(p=>p.IdPost.Equals(id));
         }
     }
 }

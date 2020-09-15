@@ -6,5 +6,7 @@ namespace SocialMedia.Core.Interfaces
     public interface IDataRepository<T>
     {
         Task<IEnumerable<T>> Get();
+
+        Task<T> GetById(int id);
     }
 }

@@ -16,7 +16,8 @@ namespace SocialMedia
 
         public IConfiguration Configuration { get; }
 
-        public void ConfigureServices(IServiceCollection services) {
+        public void ConfigureServices(IServiceCollection services) 
+        {
             services.AddControllers();
             services.AddDbContext<SocialMediaContext>(options => {
                 options.UseSqlServer(Configuration.GetConnectionString("ApiContext"));

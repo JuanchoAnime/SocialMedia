@@ -21,5 +21,12 @@ namespace SocialMedia.Infrastructure.Controllers
             var lista = await this._postRepository.Get();
             return Ok(lista);
         }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetById(int id)
+        {
+            var post = await this._postRepository.GetById(id);
+            return Ok(post);
+        }
     }
 }

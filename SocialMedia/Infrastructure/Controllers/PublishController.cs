@@ -20,7 +20,13 @@ namespace SocialMedia.Infrastructure.Controllers
         {
             var list = await this._publishRepository.Get();
             return Ok(list);
+        }
 
+        [HttpGet("{id}")]
+        public async Task<ActionResult> GetById(int id)
+        {
+            var publish = await this._publishRepository.GetById(id);
+            return Ok(publish);
         }
     }
 }
