@@ -1,29 +1,25 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using SocialMedia.Core.Entities;
 
 namespace SocialMedia.Infrastructure.Data
 {
     public partial class SocialMediaContext : DbContext
     {
-        public SocialMediaContext()
-        {
-        }
+        public SocialMediaContext() { }
 
         public SocialMediaContext(DbContextOptions<SocialMediaContext> options)
-            : base(options)
-        {
-        }
+            : base(options) { }
 
         public virtual DbSet<Comentary> Comentary { get; set; }
+
         public virtual DbSet<Publication> Publication { get; set; }
+
         public virtual DbSet<User> User { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
-            {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
                 optionsBuilder.UseSqlServer("Server=LAPTOP-FAU5RKMJ\\SQLEXPRESS;Database=SocialMedia;Integrated Security=true");
-            }
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -101,8 +97,6 @@ namespace SocialMedia.Infrastructure.Data
                     .HasMaxLength(50)
                     .IsUnicode(false);
             });
-
-            OnModelCreatingPartial(modelBuilder);
         }
     }
 }
