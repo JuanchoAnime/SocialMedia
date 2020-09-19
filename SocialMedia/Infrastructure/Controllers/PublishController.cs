@@ -1,10 +1,10 @@
-﻿using AutoMapper;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using SocialMedia.Core.Dto;
 using SocialMedia.Core.Entities;
 using SocialMedia.Core.Interfaces;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace SocialMedia.Infrastructure.Controllers
 {
