@@ -2,7 +2,6 @@
 using SocialMedia.Core.Entities;
 using SocialMedia.Core.Interfaces;
 using SocialMedia.Infrastructure.Data;
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -27,6 +26,13 @@ namespace SocialMedia.Infrastructure.Repositories
         {
             var posts = await this._context.Publication.FirstOrDefaultAsync(p => p.IdPublication.Equals(id));
             return posts;
+        }
+
+        public async Task<Publication> Save(Publication model)
+        {
+            this._context.Publication.Add(model);
+            await this._context.SaveChangesAsync();
+            return model;
         }
     }
 }

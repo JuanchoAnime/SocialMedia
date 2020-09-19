@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using SocialMedia.Core.Entities;
 using SocialMedia.Core.Interfaces;
 using System.Threading.Tasks;
 
@@ -27,6 +28,14 @@ namespace SocialMedia.Infrastructure.Controllers
         {
             var post = await this._postRepository.GetById(id);
             return Ok(post);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> Post(Post post)
+        {
+            post.IdPost = 0;
+            var model = await this._postRepository.Save(post);
+            return Ok(model);
         }
     }
 }

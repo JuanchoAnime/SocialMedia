@@ -20,14 +20,22 @@
 
         public async Task<IEnumerable<Post>> Get() 
         {
-            await Task.Delay(1);
+            await Task.Delay(1000);
             return list;
         }
 
         public async  Task<Post> GetById(int id)
         {
-            await Task.Delay(1);
+            await Task.Delay(1000);
             return list.FirstOrDefault(p=>p.IdPost.Equals(id));
+        }
+
+        public async Task<Post> Save(Post model)
+        {
+            await Task.Delay(1000);
+            model.IdPost = list.OrderBy(l => l.IdPost).Last().IdPost + 1;
+            list.Append(model);
+            return model;
         }
     }
 }
