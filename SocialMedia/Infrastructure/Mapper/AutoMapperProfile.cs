@@ -3,7 +3,7 @@ using SocialMedia.Core.Entities;
 
 namespace SocialMedia.Infrastructure.Mapper
 {
-    public class AutoMapperProfile: AutoMapper.Profile
+    public class AutoMapperProfile : AutoMapper.Profile
     {
         public AutoMapperProfile()
         {

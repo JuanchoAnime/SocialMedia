@@ -14,18 +14,20 @@ namespace SocialMedia
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration) {  Configuration = configuration; }
+        public Startup(IConfiguration configuration) { Configuration = configuration; }
 
         public IConfiguration Configuration { get; }
 
-        public void ConfigureServices(IServiceCollection services) 
+        public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-            services.AddControllers().AddNewtonsoftJson(options => {
+            services.AddControllers().AddNewtonsoftJson(options =>
+            {
                 options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
             });
-            services.AddDbContext<SocialMediaContext>(options => {
+            services.AddDbContext<SocialMediaContext>(options =>
+            {
                 options.UseSqlServer(Configuration.GetConnectionString("ApiContext"));
             });
             services.AddTransient<IPostRepository, PostRepository>();
