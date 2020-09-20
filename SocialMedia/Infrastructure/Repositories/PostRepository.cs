@@ -44,10 +44,10 @@
             return true;
         }
 
-        public async Task Delete(int id)
+        public async Task<bool> Delete(int id)
         {
             var post = await GetById(id);
-            return;
+            return true;
         }
     }
 }

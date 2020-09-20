@@ -45,12 +45,11 @@ namespace SocialMedia.Infrastructure.Repositories
             return 0 < await this._context.SaveChangesAsync();
         }
 
-        public async Task Delete(int id)
+        public async Task<bool> Delete(int id)
         {
             var post = await GetById(id);
             this._context.Publication.Remove(post);
-            await this._context.SaveChangesAsync();
-            return;
+            return 0 < await this._context.SaveChangesAsync();
         }
     }
 }

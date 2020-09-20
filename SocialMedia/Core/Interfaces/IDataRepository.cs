@@ -13,6 +13,6 @@ namespace SocialMedia.Core.Interfaces
 
         Task<bool> Update(T model);
 
-        Task Delete(int id);
+        Task<bool> Delete(int id);
     }
 }
