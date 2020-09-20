@@ -1,10 +1,10 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using SocialMedia.Core.Dto;
 using SocialMedia.Core.Entities;
 using SocialMedia.Core.Interfaces;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace SocialMedia.Infrastructure.Controllers
 {
@@ -41,6 +41,21 @@ namespace SocialMedia.Infrastructure.Controllers
             publication.IdPublication = 0;
             var publish = await this._publishRepository.Save(_mapper.Map<Publication>(publication));
             return Ok(_mapper.Map<PublicationDto>(publish));
+        }
+
+        [HttpPut("{id}")]
+        public async Task<ActionResult> Put(int id, [FromBody] PublicationDto publication)
+        {
+            publication.IdPublication = id;
+            await this._publishRepository.Update(_mapper.Map<Publication>(publication));
+            return Ok();
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> Delete(int id)
+        {
+            await this._publishRepository.Delete(id);
+            return Ok();
         }
     }
 }

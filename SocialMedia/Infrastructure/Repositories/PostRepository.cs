@@ -37,5 +37,17 @@
             list.Append(model);
             return model;
         }
+
+        public async Task<bool> Update(Post model)
+        {
+            var post = await GetById(model.IdPost);
+            return true;
+        }
+
+        public async Task Delete(int id)
+        {
+            var post = await GetById(id);
+            return;
+        }
     }
 }

@@ -10,5 +10,9 @@ namespace SocialMedia.Core.Interfaces
         Task<T> GetById(int id);
 
         Task<T> Save(T model);
+
+        Task<bool> Update(T model);
+
+        Task Delete(int id);
     }
 }
