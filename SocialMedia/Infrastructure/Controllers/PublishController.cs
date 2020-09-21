@@ -23,9 +23,9 @@
         }
 
         [HttpGet]
-        public async Task<ActionResult> Get()
+        public ActionResult Get()
         {
-            var list = await this._publishservice.Get();
+            var list = this._publishservice.Get();
             return Ok(new ApiResponse<IEnumerable<PublicationDto>>(_mapper.Map<IEnumerable<PublicationDto>>(list)));
         }
 

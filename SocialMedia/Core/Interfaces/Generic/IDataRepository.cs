@@ -1,12 +1,12 @@
-﻿using SocialMedia.Core.Entities;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-
-namespace SocialMedia.Core.Interfaces.Generic
+﻿namespace SocialMedia.Core.Interfaces.Generic
 {
+    using SocialMedia.Core.Entities;
+    using System.Collections.Generic;
+    using System.Threading.Tasks;
+
     public interface IDataRepository<T> where T :BaseEntity
     {
-        Task<IEnumerable<T>> Get();
+        IEnumerable<T> Get();
 
         Task<T> GetById(int id);
 

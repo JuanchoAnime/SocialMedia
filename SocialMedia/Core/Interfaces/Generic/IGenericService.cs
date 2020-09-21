@@ -5,7 +5,7 @@
 
     public interface IGenericService<T>
     {
-        Task<IEnumerable<T>> Get();
+        IEnumerable<T> Get();
 
         Task<T> GetById(int id);
 

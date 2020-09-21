@@ -1,6 +1,7 @@
 ﻿namespace SocialMedia.Infrastructure.Repositories
 {
     using System.Collections.Generic;
+    using System.Linq;
     using System.Threading.Tasks;
     using Microsoft.EntityFrameworkCore;
     using SocialMedia.Core.Entities;
@@ -18,22 +19,19 @@
             this._entity = _context.Set<T>();
         }
 
-        public async Task<IEnumerable<T>> Get()
+        public IEnumerable<T> Get()
         {
-            var list = await _entity.ToListAsync();
-            return list;
+            return _entity.AsEnumerable();
         }
 
         public async Task<T> GetById(int id)
         {
-            var item = await _entity.FirstOrDefaultAsync(l => l.Id.Equals(id));
-            return item;
+            return await _entity.FirstOrDefaultAsync(l => l.Id.Equals(id));
         }
 
         public async Task<T> Save(T model)
         {
-            this._entity.Add(model);
-            await this._context.SaveChangesAsync();
+            await this._entity.AddAsync(model);
             return model;
         }
 
@@ -42,14 +40,15 @@
             var item = await GetById(model.Id);
             if (item == null) return false;
             this._entity.Update(model);
-            return 0 < await this._context.SaveChangesAsync();
+            return true;
         }
 
         public async Task<bool> Delete(int id)
         {
             var item = await GetById(id);
+            if (item == null) return false;
             this._entity.Remove(item);
-            return 0 < await this._context.SaveChangesAsync();
+            return true;
         }
     }
 }

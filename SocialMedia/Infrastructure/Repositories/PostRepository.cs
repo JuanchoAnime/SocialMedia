@@ -18,9 +18,8 @@
             UserId = x * 2
         });
 
-        public async Task<IEnumerable<Post>> Get()
+        public IEnumerable<Post> Get()
         {
-            await Task.Delay(1000);
             return list;
         }
 

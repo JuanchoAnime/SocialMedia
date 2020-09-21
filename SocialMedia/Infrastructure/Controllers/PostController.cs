@@ -17,9 +17,9 @@ namespace SocialMedia.Infrastructure.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get()
+        public IActionResult Get()
         {
-            var lista = await this._postRepository.Get();
+            var lista = this._postRepository.Get();
             return Ok(lista);
         }
 
