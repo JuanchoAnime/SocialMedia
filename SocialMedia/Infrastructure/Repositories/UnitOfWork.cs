@@ -2,6 +2,7 @@
 {
     using System.Threading.Tasks;
     using SocialMedia.Core.Interfaces;
+    using SocialMedia.Core.Interfaces.Repository;
     using SocialMedia.Infrastructure.Data;
 
     public class UnitOfWork : IUnitOfWork
@@ -11,7 +12,9 @@
         private readonly IUserRepository _userRepository;
         private readonly IComentaryRepository _commentRepository;
 
-        public UnitOfWork(SocialMediaContext context) { this._context = context; }
+        public UnitOfWork(SocialMediaContext context) { 
+            this._context = context;
+        }
 
         public IPublishRepository PostRepository => _publishRepository ?? new PublishRepository(this._context);
 

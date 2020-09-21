@@ -1,7 +1,7 @@
 ﻿namespace SocialMedia.Infrastructure.Repositories
 {
     using SocialMedia.Core.Entities;
-    using SocialMedia.Core.Interfaces;
+    using SocialMedia.Core.Interfaces.Repository;
     using System;
     using System.Collections.Generic;
     using System.Linq;

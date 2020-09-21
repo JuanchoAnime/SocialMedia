@@ -11,7 +11,7 @@
     public class CrudRepository<T> : IDataRepository<T> where T : BaseEntity
     {
         private readonly SocialMediaContext _context;
-        private readonly DbSet<T> _entity;
+        protected readonly DbSet<T> _entity;
 
         public CrudRepository(SocialMediaContext context)
         {

@@ -1,4 +1,4 @@
-﻿namespace SocialMedia.Core.Interfaces
+﻿namespace SocialMedia.Core.Interfaces.Service
 {
     using SocialMedia.Core.Entities;
     using SocialMedia.Core.Interfaces.Generic;

@@ -1,21 +1,22 @@
-using System;
-using AutoMapper;
-using FluentValidation.AspNetCore;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using SocialMedia.Core.Interfaces;
-using SocialMedia.Core.Interfaces.Generic;
-using SocialMedia.Core.Services;
-using SocialMedia.Infrastructure.Data;
-using SocialMedia.Infrastructure.Filters;
-using SocialMedia.Infrastructure.Repositories;
-
 namespace SocialMedia
 {
+    using System;
+    using AutoMapper;
+    using FluentValidation.AspNetCore;
+    using Microsoft.AspNetCore.Builder;
+    using Microsoft.AspNetCore.Hosting;
+    using Microsoft.EntityFrameworkCore;
+    using Microsoft.Extensions.Configuration;
+    using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.Hosting;
+    using SocialMedia.Core.Interfaces;
+    using SocialMedia.Core.Interfaces.Repository;
+    using SocialMedia.Core.Interfaces.Service;
+    using SocialMedia.Core.Services;
+    using SocialMedia.Infrastructure.Data;
+    using SocialMedia.Infrastructure.Filters;
+    using SocialMedia.Infrastructure.Repositories;
+
     public class Startup
     {
         public Startup(IConfiguration configuration) { Configuration = configuration; }
@@ -24,7 +25,9 @@ namespace SocialMedia
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers().AddNewtonsoftJson(options => {
+            services.AddControllers(options=> {
+                options.Filters.Add<GlobalExceptionFilter>();
+            }).AddNewtonsoftJson(options => {
                 options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
             }).ConfigureApiBehaviorOptions(options => {
                 options.SuppressModelStateInvalidFilter = true;

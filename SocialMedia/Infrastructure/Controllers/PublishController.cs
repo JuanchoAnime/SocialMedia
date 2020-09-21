@@ -4,7 +4,7 @@
     using Microsoft.AspNetCore.Mvc;
     using SocialMedia.Core.Dto;
     using SocialMedia.Core.Entities;
-    using SocialMedia.Core.Interfaces;
+    using SocialMedia.Core.Interfaces.Service;
     using SocialMedia.Infrastructure.Response;
     using System.Collections.Generic;
     using System.Threading.Tasks;

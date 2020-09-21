@@ -1,5 +1,6 @@
 ﻿namespace SocialMedia.Core.Interfaces
 {
+    using SocialMedia.Core.Interfaces.Repository;
     using System;
     using System.Threading.Tasks;
 

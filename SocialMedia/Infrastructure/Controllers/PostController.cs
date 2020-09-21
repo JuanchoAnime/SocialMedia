@@ -1,10 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using SocialMedia.Core.Entities;
-using SocialMedia.Core.Interfaces;
-using System.Threading.Tasks;
-
-namespace SocialMedia.Infrastructure.Controllers
+﻿namespace SocialMedia.Infrastructure.Controllers
 {
+    using Microsoft.AspNetCore.Mvc;
+    using SocialMedia.Core.Entities;
+    using SocialMedia.Core.Interfaces.Repository;
+    using System.Threading.Tasks;
+
     [Route("api/[controller]")]
     [ApiController]
     public class PostController : ControllerBase

@@ -6,7 +6,6 @@
 
   <ItemGroup>
     <Folder Include="Core\Enums\" />
-    <Folder Include="Core\Exceptions\" />
   </ItemGroup>
 
   <ItemGroup>
