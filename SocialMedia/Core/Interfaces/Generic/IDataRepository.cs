@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace SocialMedia.Core.Interfaces
+namespace SocialMedia.Core.Interfaces.Generic
 {
     public interface IDataRepository<T>
     {

@@ -3,7 +3,7 @@
     using SocialMedia.Core.Entities;
     using SocialMedia.Core.Interfaces.Generic;
 
-    public interface IPostRepository : IDataRepository<Post>
+    public interface IPublicationService : IGenericService<Publication>
     {
     }
 }

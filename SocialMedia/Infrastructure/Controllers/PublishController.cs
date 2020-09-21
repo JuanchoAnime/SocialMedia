@@ -13,26 +13,26 @@ namespace SocialMedia.Infrastructure.Controllers
     [ApiController]
     public class PublishController : ControllerBase
     {
-        private readonly IPublishRepository _publishRepository;
+        private readonly IPublicationService _publishservice;
         private readonly IMapper _mapper;
 
-        public PublishController(IPublishRepository publishRepository, IMapper mapper)
+        public PublishController(IPublicationService _publishservice, IMapper mapper)
         {
-            this._publishRepository = publishRepository;
+            this._publishservice = _publishservice;
             this._mapper = mapper;
         }
 
         [HttpGet]
         public async Task<ActionResult> Get()
         {
-            var list = await this._publishRepository.Get();
+            var list = await this._publishservice.Get();
             return Ok(new ApiResponse<IEnumerable<PublicationDto>>(_mapper.Map<IEnumerable<PublicationDto>>(list)));
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult> GetById(int id)
         {
-            var publish = await this._publishRepository.GetById(id);
+            var publish = await this._publishservice.GetById(id);
             return Ok(new ApiResponse<PublicationDto>(_mapper.Map<PublicationDto>(publish)));
         }
 
@@ -40,7 +40,7 @@ namespace SocialMedia.Infrastructure.Controllers
         public async Task<ActionResult> Post(PublicationDto publication)
         {
             publication.IdPublication = 0;
-            var publish = await this._publishRepository.Save(_mapper.Map<Publication>(publication));
+            var publish = await this._publishservice.Save(_mapper.Map<Publication>(publication));
             return Ok(new ApiResponse<PublicationDto>(_mapper.Map<PublicationDto>(publish)));
         }
 
@@ -48,14 +48,14 @@ namespace SocialMedia.Infrastructure.Controllers
         public async Task<ActionResult> Put(int id, [FromBody] PublicationDto publication)
         {
             publication.IdPublication = id;
-            var response = await this._publishRepository.Update(_mapper.Map<Publication>(publication));
+            var response = await this._publishservice.Update(_mapper.Map<Publication>(publication));
             return Ok(new ApiResponse<bool>(response));
         }
 
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(int id)
         {
-            var response = await this._publishRepository.Delete(id);
+            var response = await this._publishservice.Delete(id);
             return Ok(new ApiResponse<bool>(response));
         }
     }
