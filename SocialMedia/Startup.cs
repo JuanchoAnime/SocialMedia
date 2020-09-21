@@ -44,6 +44,8 @@ namespace SocialMedia
             //Services
             services.AddTransient<IPublicationService, PublicationService>();
 
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
+
             services.AddMvc(options => {
                 options.Filters.Add<ValidationFilter>();
             }).AddFluentValidation(options=> {

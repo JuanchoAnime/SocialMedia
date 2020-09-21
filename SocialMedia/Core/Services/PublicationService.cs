@@ -7,48 +7,45 @@
 
     public class PublicationService : IPublicationService
     {
-        private readonly IPublishRepository _publishRepository;
-        private readonly IUserRepository _userRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public PublicationService(IPublishRepository publishRepository,
-            IUserRepository userRepository)
+        public PublicationService(IUnitOfWork unitOfWork)
         {
-            this._publishRepository = publishRepository;
-            this._userRepository = userRepository;
+            this._unitOfWork = unitOfWork;
         }
 
         public async Task<IEnumerable<Publication>> Get()
         {
-            var list = await _publishRepository.Get();
+            var list = await _unitOfWork.PostRepository.Get();
             return list;
         }
 
         public async Task<Publication> GetById(int id)
         {
-            var post = await _publishRepository.GetById(id);
+            var post = await _unitOfWork.PostRepository.GetById(id);
             return post;
         }
 
         public async Task<Publication> Save(Publication publication) 
         {
-            var user = await _userRepository.GetById(publication.IdUser);
+            var user = await _unitOfWork.PostRepository.GetById(publication.IdUser);
             if (user == null)
                 throw new System.Exception("User doesn't exists");
             if(publication.Description.ToLower().Contains("sexo"))
                 throw new System.Exception("Content not allowed");
-            var post = await _publishRepository.Save(publication);
+            var post = await _unitOfWork.PostRepository.Save(publication);
             return post;
         }
 
         public async Task<bool> Update(Publication publication)
         {
-            var post = await _publishRepository.Update(publication);
+            var post = await _unitOfWork.PostRepository.Update(publication);
             return post;
         }
 
         public async Task<bool> Delete(int id)
         {
-            var post = await _publishRepository.Delete(id);
+            var post = await _unitOfWork.PostRepository.Delete(id);
             return post;
         }
     }
