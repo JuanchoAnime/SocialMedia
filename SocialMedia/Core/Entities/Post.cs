@@ -1,9 +1,7 @@
 ﻿namespace SocialMedia.Core.Entities
 {
-    public class Post
+    public class Post: BaseEntity
     {
-        public int IdPost { get; set; }
-
         public int UserId { get; set; }
 
         public System.DateTime Date { get; set; }

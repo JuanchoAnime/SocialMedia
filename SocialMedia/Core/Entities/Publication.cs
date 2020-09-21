@@ -3,14 +3,12 @@ using System.Collections.Generic;
 
 namespace SocialMedia.Core.Entities
 {
-    public partial class Publication
+    public partial class Publication: BaseEntity
     {
         public Publication()
         {
             Comentary = new HashSet<Comentary>();
         }
-
-        public int IdPublication { get; set; }
 
         public int IdUser { get; set; }
 

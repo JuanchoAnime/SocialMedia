@@ -2,10 +2,8 @@
 
 namespace SocialMedia.Core.Entities
 {
-    public partial class Comentary
+    public partial class Comentary: BaseEntity
     {
-        public int IdComentary { get; set; }
-
         public int IdPublication { get; set; }
 
         public int IdUser { get; set; }

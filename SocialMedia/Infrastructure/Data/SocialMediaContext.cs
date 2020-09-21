@@ -26,9 +26,11 @@ namespace SocialMedia.Infrastructure.Data
         {
             modelBuilder.Entity<Comentary>(entity =>
             {
-                entity.HasKey(e => e.IdComentary);
+                entity.HasKey(e => e.Id);
 
-                entity.Property(e => e.IdComentary).ValueGeneratedNever();
+                entity.Property(e => e.Id)
+                        .HasColumnName("IdComentary")
+                        .ValueGeneratedNever();
 
                 entity.Property(e => e.Date).HasColumnType("datetime");
 
@@ -52,7 +54,10 @@ namespace SocialMedia.Infrastructure.Data
 
             modelBuilder.Entity<Publication>(entity =>
             {
-                entity.HasKey(e => e.IdPublication);
+                entity.HasKey(e => e.Id);
+
+                entity.Property(e => e.Id)
+                        .HasColumnName("IdPublication");
 
                 entity.Property(e => e.Date).HasColumnType("datetime");
 
@@ -74,7 +79,10 @@ namespace SocialMedia.Infrastructure.Data
 
             modelBuilder.Entity<User>(entity =>
             {
-                entity.HasKey(e => e.IdUser);
+                entity.HasKey(e => e.Id);
+
+                entity.Property(e => e.Id)
+                        .HasColumnName("IdUser");
 
                 entity.Property(e => e.Cellphone)
                     .HasMaxLength(10)

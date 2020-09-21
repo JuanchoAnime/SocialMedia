@@ -33,7 +33,7 @@ namespace SocialMedia.Infrastructure.Controllers
         [HttpPost]
         public async Task<ActionResult> Post(Post post)
         {
-            post.IdPost = 0;
+            post.Id = 0;
             var model = await this._postRepository.Save(post);
             return Ok(model);
         }

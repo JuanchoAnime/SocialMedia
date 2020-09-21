@@ -11,7 +11,7 @@
     {
         private readonly IEnumerable<Post> list = Enumerable.Range(1, 10).Select(x => new Post()
         {
-            IdPost = x,
+            Id = x,
             Description = $"Description {x}",
             Date = DateTime.Now.AddDays(x),
             Image = $"http://miapi.com/image/{x}",
@@ -27,20 +27,20 @@
         public async Task<Post> GetById(int id)
         {
             await Task.Delay(1000);
-            return list.FirstOrDefault(p => p.IdPost.Equals(id));
+            return list.FirstOrDefault(p => p.Id.Equals(id));
         }
 
         public async Task<Post> Save(Post model)
         {
             await Task.Delay(1000);
-            model.IdPost = list.OrderBy(l => l.IdPost).Last().IdPost + 1;
+            model.Id = list.OrderBy(l => l.Id).Last().Id + 1;
             list.Append(model);
             return model;
         }
 
         public async Task<bool> Update(Post model)
         {
-            var post = await GetById(model.IdPost);
+            var post = await GetById(model.Id);
             return true;
         }
 

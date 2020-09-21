@@ -2,7 +2,7 @@
 {
     public class PublicationDto
     {
-        public int IdPublication { get; set; }
+        public int Id { get; set; }
 
         public int IdUser { get; set; }
 
