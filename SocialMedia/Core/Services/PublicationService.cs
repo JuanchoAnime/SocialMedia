@@ -4,6 +4,7 @@
     using SocialMedia.Core.Exceptions;
     using SocialMedia.Core.Interfaces;
     using SocialMedia.Core.Interfaces.Service;
+    using SocialMedia.Core.QueryFilter;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
@@ -17,7 +18,7 @@
             this._unitOfWork = unitOfWork;
         }
 
-        public IEnumerable<Publication> Get()
+        public IEnumerable<Publication> Get(GetQueryFilter queryFilter)
         {
             return _unitOfWork.PostRepository.Get();
         }

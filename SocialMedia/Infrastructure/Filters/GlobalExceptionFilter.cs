@@ -1,22 +1,19 @@
 ﻿namespace SocialMedia.Infrastructure.Filters
 {
+    using System.Net;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.Filters;
     using SocialMedia.Core.Exceptions;
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Threading.Tasks;
 
     public class GlobalExceptionFilter : IExceptionFilter
     {
         public void OnException(ExceptionContext context)
         {
-            if(context.Exception.GetType() == typeof(BusinessException))
+            if (context.Exception.GetType() == typeof(BusinessException))
             {
                 var exception = (BusinessException)context.Exception;
-                var validation = new {
+                var validation = new
+                {
                     Status = 400,
                     Title = "BadRequest",
                     Detail = exception.Message

@@ -1,12 +1,12 @@
 ﻿namespace SocialMedia.Infrastructure.Repositories
 {
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Threading.Tasks;
     using Microsoft.EntityFrameworkCore;
     using SocialMedia.Core.Entities;
     using SocialMedia.Core.Interfaces.Repository;
     using SocialMedia.Infrastructure.Data;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Threading.Tasks;
 
     public class PublishRepository : CrudRepository<Publication>, IPublishRepository
     {
@@ -16,7 +16,7 @@
 
         public async Task<IEnumerable<Publication>> GetPostsByUser(int userId)
         {
-            return await this._entity.Where(post => post.IdUser.Equals(userId)).ToListAsync() ;
+            return await this._entity.Where(post => post.IdUser.Equals(userId)).ToListAsync();
         }
     }
 }

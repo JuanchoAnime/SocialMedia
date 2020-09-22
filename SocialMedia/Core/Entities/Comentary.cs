@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace SocialMedia.Core.Entities
+﻿namespace SocialMedia.Core.Entities
 {
     public partial class Comentary: BaseEntity
     {
@@ -10,7 +8,7 @@ namespace SocialMedia.Core.Entities
 
         public string Description { get; set; }
 
-        public DateTime Date { get; set; }
+        public System.DateTime Date { get; set; }
 
         public bool Active { get; set; }
 

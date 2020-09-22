@@ -2,10 +2,11 @@
 {
     using System.Collections.Generic;
     using System.Threading.Tasks;
+    using SocialMedia.Core.QueryFilter;
 
     public interface IGenericService<T>
     {
-        IEnumerable<T> Get();
+        IEnumerable<T> Get(GetQueryFilter queryFilter);
 
         Task<T> GetById(int id);
 

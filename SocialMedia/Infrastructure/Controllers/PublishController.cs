@@ -1,13 +1,14 @@
 ﻿namespace SocialMedia.Infrastructure.Controllers
 {
+    using System.Collections.Generic;
+    using System.Threading.Tasks;
     using AutoMapper;
     using Microsoft.AspNetCore.Mvc;
     using SocialMedia.Core.Dto;
     using SocialMedia.Core.Entities;
     using SocialMedia.Core.Interfaces.Service;
+    using SocialMedia.Core.QueryFilter;
     using SocialMedia.Infrastructure.Response;
-    using System.Collections.Generic;
-    using System.Threading.Tasks;
 
     [Route("api/[controller]")]
     [ApiController]
@@ -23,9 +24,9 @@
         }
 
         [HttpGet]
-        public ActionResult Get()
+        public ActionResult Get([FromQuery] GetQueryFilter queryFilter)
         {
-            var list = this._publishservice.Get();
+            var list = this._publishservice.Get(queryFilter: queryFilter);
             return Ok(new ApiResponse<IEnumerable<PublicationDto>>(_mapper.Map<IEnumerable<PublicationDto>>(list)));
         }
 
