@@ -1,6 +1,8 @@
 ﻿namespace SocialMedia.Core.Services
 {
     using Microsoft.Extensions.FileSystemGlobbing.Internal.PathSegments;
+    using SocialMedia.Core.Custom;
+    using SocialMedia.Core.Dto;
     using SocialMedia.Core.Entities;
     using SocialMedia.Core.Exceptions;
     using SocialMedia.Core.Interfaces;
@@ -24,7 +26,7 @@
             return _unitOfWork.PostRepository.Get();
         }
 
-        public IEnumerable<Publication> GetWithFilters(GetQueryFilter queryFilter)
+        public PageList<Publication> GetWithFilters(GetQueryFilter queryFilter)
         {
             var list = _unitOfWork.PostRepository.Get();
             if (queryFilter.IdUser.HasValue)
@@ -33,7 +35,7 @@
                 list = list.Where(p => p.Description.ToLower().Contains(queryFilter.Description.ToLower()));
             if(queryFilter.Date.HasValue)
                 list = list.Where(p => p.Date.ToShortDateString().Equals(queryFilter.Date.Value.ToShortDateString()));
-            return list;
+            return PageList<Publication>.Create(list, queryFilter.PageNumber, queryFilter.PageSize);
         }
 
             public async Task<Publication> GetById(int id)

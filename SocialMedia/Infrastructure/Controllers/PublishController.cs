@@ -5,6 +5,7 @@
     using System.Threading.Tasks;
     using AutoMapper;
     using Microsoft.AspNetCore.Mvc;
+    using Newtonsoft.Json;
     using SocialMedia.Core.Dto;
     using SocialMedia.Core.Entities;
     using SocialMedia.Core.Interfaces.Service;
@@ -29,6 +30,16 @@
         public IActionResult Get([FromQuery] GetQueryFilter queryFilter)
         {
             var list = this._publishservice.GetWithFilters(queryFilter: queryFilter);
+
+            var metadata = new {
+                list.TotalCount,
+                list.PageSize,
+                list.Current,
+                list.TotalPage,
+                list.HasNextPage,
+                list.HasPreviusPage
+            };
+            Response.Headers.Add("x-pagination", JsonConvert.SerializeObject(metadata));
             return Ok(new ApiResponse<IEnumerable<PublicationDto>>(_mapper.Map<IEnumerable<PublicationDto>>(list)));
         }
 
