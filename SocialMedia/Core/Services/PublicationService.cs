@@ -1,5 +1,6 @@
 ﻿namespace SocialMedia.Core.Services
 {
+    using Microsoft.Extensions.FileSystemGlobbing.Internal.PathSegments;
     using SocialMedia.Core.Entities;
     using SocialMedia.Core.Exceptions;
     using SocialMedia.Core.Interfaces;
@@ -18,12 +19,24 @@
             this._unitOfWork = unitOfWork;
         }
 
-        public IEnumerable<Publication> Get(GetQueryFilter queryFilter)
+        public IEnumerable<Publication> Get()
         {
             return _unitOfWork.PostRepository.Get();
         }
 
-        public async Task<Publication> GetById(int id)
+        public IEnumerable<Publication> GetWithFilters(GetQueryFilter queryFilter)
+        {
+            var list = _unitOfWork.PostRepository.Get();
+            if (queryFilter.IdUser.HasValue)
+                list = list.Where(p => p.IdUser.Equals(queryFilter.IdUser.Value));
+            if(!string.IsNullOrEmpty(queryFilter.Description))
+                list = list.Where(p => p.Description.ToLower().Contains(queryFilter.Description.ToLower()));
+            if(queryFilter.Date.HasValue)
+                list = list.Where(p => p.Date.ToShortDateString().Equals(queryFilter.Date.Value.ToShortDateString()));
+            return list;
+        }
+
+            public async Task<Publication> GetById(int id)
         {
             return await _unitOfWork.PostRepository.GetById(id);
         }
@@ -43,7 +56,7 @@
                 if (lastPost != null && (publication.Date - lastPost.Date).TotalDays < 7)
                     throw new BusinessException("You are not available to publish");
             }
-
+            publication.Description = publication.Description.Trim();
             var post = await _unitOfWork.PostRepository.Save(publication);
             await _unitOfWork.SaveChangesAsync();
             return post;

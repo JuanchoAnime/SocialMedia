@@ -6,7 +6,7 @@
 
     public interface IGenericService<T>
     {
-        IEnumerable<T> Get(GetQueryFilter queryFilter);
+        IEnumerable<T> Get();
 
         Task<T> GetById(int id);
 

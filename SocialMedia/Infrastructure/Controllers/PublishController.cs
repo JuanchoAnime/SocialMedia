@@ -1,6 +1,7 @@
 ﻿namespace SocialMedia.Infrastructure.Controllers
 {
     using System.Collections.Generic;
+    using System.Net;
     using System.Threading.Tasks;
     using AutoMapper;
     using Microsoft.AspNetCore.Mvc;
@@ -24,21 +25,24 @@
         }
 
         [HttpGet]
-        public ActionResult Get([FromQuery] GetQueryFilter queryFilter)
+        [ProducesResponseType(typeof(ApiResponse<IEnumerable<PublicationDto>>), 200)]
+        public IActionResult Get([FromQuery] GetQueryFilter queryFilter)
         {
-            var list = this._publishservice.Get(queryFilter: queryFilter);
+            var list = this._publishservice.GetWithFilters(queryFilter: queryFilter);
             return Ok(new ApiResponse<IEnumerable<PublicationDto>>(_mapper.Map<IEnumerable<PublicationDto>>(list)));
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult> GetById(int id)
+        [ProducesResponseType(typeof(ApiResponse<PublicationDto>), 200)]
+        public async Task<IActionResult> GetById(int id)
         {
             var publish = await this._publishservice.GetById(id);
             return Ok(new ApiResponse<PublicationDto>(_mapper.Map<PublicationDto>(publish)));
         }
 
         [HttpPost]
-        public async Task<ActionResult> Post(PublicationDto publication)
+        [ProducesResponseType(typeof(ApiResponse<PublicationDto>), (int)HttpStatusCode.OK)]
+        public async Task<IActionResult> Post(PublicationDto publication)
         {
             publication.Id = 0;
             var publish = await this._publishservice.Save(_mapper.Map<Publication>(publication));
@@ -46,7 +50,7 @@
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult> Put(int id, [FromBody] PublicationDto publication)
+        public async Task<IActionResult> Put(int id, [FromBody] PublicationDto publication)
         {
             publication.Id = id;
             var response = await this._publishservice.Update(_mapper.Map<Publication>(publication));
@@ -57,7 +61,7 @@
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
             var response = await this._publishservice.Delete(id);
             //return Ok(new ApiResponse<bool>(response));
