@@ -5,17 +5,21 @@ namespace SocialMedia
     using FluentValidation.AspNetCore;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
+    using Microsoft.AspNetCore.Http;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
+    using SocialMedia.Core.Custom;
     using SocialMedia.Core.Interfaces;
     using SocialMedia.Core.Interfaces.Repository;
     using SocialMedia.Core.Interfaces.Service;
     using SocialMedia.Core.Services;
     using SocialMedia.Infrastructure.Data;
     using SocialMedia.Infrastructure.Filters;
+    using SocialMedia.Infrastructure.Interfaces;
     using SocialMedia.Infrastructure.Repositories;
+    using SocialMedia.Infrastructure.Services;
 
     public class Startup
     {
@@ -25,23 +29,19 @@ namespace SocialMedia
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers(options =>
-            {
+            services.AddControllers(options => {
                 options.Filters.Add<GlobalExceptionFilter>();
-            }).AddNewtonsoftJson(options =>
-            {
+            }).AddNewtonsoftJson(options => {
                 options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
-            }).ConfigureApiBehaviorOptions(options =>
-            {
+                options.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
+            }).ConfigureApiBehaviorOptions(options => {
                 options.SuppressModelStateInvalidFilter = true;
             });
-
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-
-            services.AddDbContext<SocialMediaContext>(options =>
-            {
+            services.AddDbContext<SocialMediaContext>(options => {
                 options.UseSqlServer(Configuration.GetConnectionString("ApiContext"));
             });
+            services.Configure<PaginationOptions>(Configuration.GetSection("Pagination"));
 
             // Repositories
             services.AddTransient<IPublishRepository, PublishRepository>();
@@ -49,7 +49,13 @@ namespace SocialMedia
 
             //Services
             services.AddTransient<IPublicationService, PublicationService>();
-
+            services.AddSingleton<IUriService>(provider =>
+            {
+                var acceso = provider.GetRequiredService<IHttpContextAccessor>();
+                var request = acceso.HttpContext.Request;
+                var absoluteUri = string.Concat(request.Scheme, "://", request.Host.ToUriComponent());
+                return new UriService(absoluteUri);
+            });
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             services.AddMvc(options =>

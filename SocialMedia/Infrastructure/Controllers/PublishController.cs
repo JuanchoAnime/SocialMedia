@@ -6,10 +6,12 @@
     using AutoMapper;
     using Microsoft.AspNetCore.Mvc;
     using Newtonsoft.Json;
+    using SocialMedia.Core.Custom;
     using SocialMedia.Core.Dto;
     using SocialMedia.Core.Entities;
     using SocialMedia.Core.Interfaces.Service;
     using SocialMedia.Core.QueryFilter;
+    using SocialMedia.Infrastructure.Interfaces;
     using SocialMedia.Infrastructure.Response;
 
     [Route("api/[controller]")]
@@ -18,33 +20,37 @@
     {
         private readonly IPublicationService _publishservice;
         private readonly IMapper _mapper;
+        private readonly IUriService unitService;
 
-        public PublishController(IPublicationService _publishservice, IMapper mapper)
+        public PublishController(IPublicationService _publishservice, IMapper mapper, IUriService unitService)
         {
             this._publishservice = _publishservice;
             this._mapper = mapper;
+            this.unitService = unitService;
         }
 
-        [HttpGet]
-        [ProducesResponseType(typeof(ApiResponse<IEnumerable<PublicationDto>>), 200)]
+        [HttpGet(Name = nameof(Get))]
+        [ProducesResponseType(typeof(ApiResponse<IEnumerable<PublicationDto>>), (int)HttpStatusCode.OK)]
         public IActionResult Get([FromQuery] GetQueryFilter queryFilter)
         {
             var list = this._publishservice.GetWithFilters(queryFilter: queryFilter);
 
-            var metadata = new {
-                list.TotalCount,
-                list.PageSize,
-                list.Current,
-                list.TotalPage,
-                list.HasNextPage,
-                list.HasPreviusPage
+            var metadata = new MetaData {
+                TotalCount = list.TotalCount,
+                PageSize = list.PageSize,
+                CurrentPage = list.Current,
+                TotalPages = list.TotalPage,
+                HasNextPage = list.HasNextPage,
+                HasPreviusPage = list.HasPreviusPage,
+                NextPageUrl = unitService.GetPostPaginaUrl(queryFilter, Url.RouteUrl(nameof(Get))).ToString(),
+                PreviousPageUrl = unitService.GetPostPaginaUrl(queryFilter, Url.RouteUrl(nameof(Get))).ToString(),
             };
             Response.Headers.Add("x-pagination", JsonConvert.SerializeObject(metadata));
-            return Ok(new ApiResponse<IEnumerable<PublicationDto>>(_mapper.Map<IEnumerable<PublicationDto>>(list)));
+            return Ok(new ApiResponse<IEnumerable<PublicationDto>>(_mapper.Map<IEnumerable<PublicationDto>>(list)) { MetaData = metadata });
         }
 
         [HttpGet("{id}")]
-        [ProducesResponseType(typeof(ApiResponse<PublicationDto>), 200)]
+        [ProducesResponseType(typeof(ApiResponse<PublicationDto>), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> GetById(int id)
         {
             var publish = await this._publishservice.GetById(id);
@@ -61,6 +67,7 @@
         }
 
         [HttpPut("{id}")]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
         public async Task<IActionResult> Put(int id, [FromBody] PublicationDto publication)
         {
             publication.Id = id;
@@ -72,6 +79,7 @@
         }
 
         [HttpDelete("{id}")]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
         public async Task<IActionResult> Delete(int id)
         {
             var response = await this._publishservice.Delete(id);

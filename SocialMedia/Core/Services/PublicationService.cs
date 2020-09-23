@@ -1,8 +1,7 @@
 ﻿namespace SocialMedia.Core.Services
 {
-    using Microsoft.Extensions.FileSystemGlobbing.Internal.PathSegments;
+    using Microsoft.Extensions.Options;
     using SocialMedia.Core.Custom;
-    using SocialMedia.Core.Dto;
     using SocialMedia.Core.Entities;
     using SocialMedia.Core.Exceptions;
     using SocialMedia.Core.Interfaces;
@@ -15,10 +14,12 @@
     public class PublicationService : IPublicationService
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly PaginationOptions paginationOptions;
 
-        public PublicationService(IUnitOfWork unitOfWork)
+        public PublicationService(IUnitOfWork unitOfWork, IOptions<PaginationOptions> options)
         {
             this._unitOfWork = unitOfWork;
+            this.paginationOptions = options.Value;
         }
 
         public IEnumerable<Publication> Get()
@@ -28,17 +29,20 @@
 
         public PageList<Publication> GetWithFilters(GetQueryFilter queryFilter)
         {
+            queryFilter.PageNumber = queryFilter.PageNumber == 0 ? paginationOptions.DefaultNumber : queryFilter.PageNumber;
+            queryFilter.PageSize = queryFilter.PageSize == 0 ? paginationOptions.DefaultPageSize : queryFilter.PageSize;
+
             var list = _unitOfWork.PostRepository.Get();
             if (queryFilter.IdUser.HasValue)
                 list = list.Where(p => p.IdUser.Equals(queryFilter.IdUser.Value));
-            if(!string.IsNullOrEmpty(queryFilter.Description))
+            if (!string.IsNullOrEmpty(queryFilter.Description))
                 list = list.Where(p => p.Description.ToLower().Contains(queryFilter.Description.ToLower()));
-            if(queryFilter.Date.HasValue)
+            if (queryFilter.Date.HasValue)
                 list = list.Where(p => p.Date.ToShortDateString().Equals(queryFilter.Date.Value.ToShortDateString()));
             return PageList<Publication>.Create(list, queryFilter.PageNumber, queryFilter.PageSize);
         }
 
-            public async Task<Publication> GetById(int id)
+        public async Task<Publication> GetById(int id)
         {
             return await _unitOfWork.PostRepository.GetById(id);
         }
