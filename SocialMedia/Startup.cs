@@ -10,6 +10,7 @@ namespace SocialMedia
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
+    using Microsoft.OpenApi.Models;
     using SocialMedia.Core.Custom;
     using SocialMedia.Core.Interfaces;
     using SocialMedia.Core.Interfaces.Repository;
@@ -58,11 +59,12 @@ namespace SocialMedia
             });
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 
-            services.AddMvc(options =>
-            {
+            services.AddSwaggerGen(swagger=> {
+                swagger.SwaggerDoc("v1", new OpenApiInfo { Title = "Social Media API", Version = "1" });
+            });
+            services.AddMvc(options => {
                 options.Filters.Add<ValidationFilter>();
-            }).AddFluentValidation(options =>
-            {
+            }).AddFluentValidation(options => {
                 options.RegisterValidatorsFromAssemblies(AppDomain.CurrentDomain.GetAssemblies());
             });
         }
@@ -71,6 +73,11 @@ namespace SocialMedia
         {
             if (env.IsDevelopment()) app.UseDeveloperExceptionPage();
             app.UseHttpsRedirection();
+            app.UseSwagger();
+            app.UseSwaggerUI(options => {
+                options.SwaggerEndpoint("/swagger/v1/swagger.json", "Socila Media API");
+                options.RoutePrefix = string.Empty;
+            });
             app.UseRouting();
             app.UseAuthorization();
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
