@@ -4,6 +4,7 @@
     using System.Net;
     using System.Threading.Tasks;
     using AutoMapper;
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using Newtonsoft.Json;
     using SocialMedia.Core.Custom;
@@ -14,6 +15,7 @@
     using SocialMedia.Infrastructure.Interfaces;
     using SocialMedia.Infrastructure.Response;
 
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class PublishController : ControllerBase
