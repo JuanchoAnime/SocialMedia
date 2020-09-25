@@ -7,20 +7,51 @@
 
     public class UnitOfWork : IUnitOfWork
     {
-        private readonly SocialMediaContext _context;
-        private readonly IPublishRepository _publishRepository;
-        private readonly IUserRepository _userRepository;
-        private readonly IComentaryRepository _commentRepository;
+        private SocialMediaContext _context;
+        private IPublishRepository _publishRepository;
+        private IUserRepository _userRepository;
+        private IComentaryRepository _commentRepository;
+        private ISecurityRepository _securityRepository;
 
-        public UnitOfWork(SocialMediaContext context) { 
+        public UnitOfWork(SocialMediaContext context) {
             this._context = context;
         }
 
-        public IPublishRepository PostRepository => _publishRepository ?? new PublishRepository(this._context);
+        public IPublishRepository PostRepository
+        {
+            get
+            {
+                _publishRepository = _publishRepository ?? new PublishRepository(this._context);
+                return _publishRepository;
+            }
+        }
 
-        public IUserRepository UserRepository => _userRepository ?? new UserRepository(this._context);
+        public ISecurityRepository SecurityRepository
+        {
+            get
+            {
+                _securityRepository = _securityRepository ?? new SecurityRepository(this._context);
+                return _securityRepository;
+            }
+        }
 
-        public IComentaryRepository ComentaryRepository => _commentRepository ?? new ComentaryRepository(this._context);
+        public IUserRepository UserRepository
+        {
+            get
+            {
+                _userRepository = _userRepository ?? new UserRepository(this._context);
+                return _userRepository;
+            }
+        }
+
+        public IComentaryRepository ComentaryRepository
+        {
+            get
+            {
+                _commentRepository = _commentRepository ?? new ComentaryRepository(this._context);
+                return _commentRepository;
+            }
+        }
 
 
         public void Dispose()

@@ -9,6 +9,9 @@ namespace SocialMedia.Infrastructure.Mapper
         {
             CreateMap<PublicationDto, Publication>();
             CreateMap<Publication, PublicationDto>();
+
+            CreateMap<Security, SecurityDto>();
+            CreateMap<SecurityDto, Security>();
         }
     }
 }

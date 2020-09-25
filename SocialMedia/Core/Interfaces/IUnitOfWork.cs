@@ -12,6 +12,8 @@
 
         public IComentaryRepository ComentaryRepository { get; }
 
+        public ISecurityRepository SecurityRepository { get; }
+
         void SaveChanges();
 
         Task SaveChangesAsync();

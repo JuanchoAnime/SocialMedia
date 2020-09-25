@@ -10,9 +10,9 @@
 
         Task<T> GetById(int id);
 
-        Task<T> Save(T publication);
+        Task<T> Save(T model);
 
-        Task<bool> Update(T publication);
+        Task<bool> Update(T model);
 
         Task<bool> Delete(int id);
     }

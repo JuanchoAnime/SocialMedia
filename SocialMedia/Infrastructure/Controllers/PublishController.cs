@@ -44,8 +44,10 @@
                 TotalPages = list.TotalPage,
                 HasNextPage = list.HasNextPage,
                 HasPreviusPage = list.HasPreviusPage,
-                NextPageUrl = unitService.GetPostPaginaUrl(queryFilter, Url.RouteUrl(nameof(Get))).ToString(),
-                PreviousPageUrl = unitService.GetPostPaginaUrl(queryFilter, Url.RouteUrl(nameof(Get))).ToString(),
+                NextPageUrl = list.HasNextPage
+                            ? $"{unitService.GetPostPaginaUrl(queryFilter, Url.RouteUrl(nameof(Get))).ToString()}?PageNumber={list.Current+1}" : string.Empty,
+                PreviousPageUrl = list.HasPreviusPage
+                            ? $"{unitService.GetPostPaginaUrl(queryFilter, Url.RouteUrl(nameof(Get))).ToString()}?PageNumber={list.Current-1}" : string.Empty,
             };
             Response.Headers.Add("x-pagination", JsonConvert.SerializeObject(metadata));
             return Ok(new ApiResponse<IEnumerable<PublicationDto>>(_mapper.Map<IEnumerable<PublicationDto>>(list)) { MetaData = metadata });

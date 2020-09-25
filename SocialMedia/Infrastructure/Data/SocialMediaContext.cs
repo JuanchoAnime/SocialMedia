@@ -1,5 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SocialMedia.Core.Entities;
+using SocialMedia.Core.Enums;
+using System;
 
 namespace SocialMedia.Infrastructure.Data
 {
@@ -16,6 +18,8 @@ namespace SocialMedia.Infrastructure.Data
 
         public virtual DbSet<User> User { get; set; }
 
+        public virtual DbSet<Security> Security { get; set; }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
@@ -27,24 +31,19 @@ namespace SocialMedia.Infrastructure.Data
             modelBuilder.Entity<Comentary>(entity =>
             {
                 entity.HasKey(e => e.Id);
-
                 entity.Property(e => e.Id)
                         .HasColumnName("IdComentary")
                         .ValueGeneratedNever();
-
                 entity.Property(e => e.Date).HasColumnType("datetime");
-
                 entity.Property(e => e.Description)
                     .IsRequired()
                     .HasMaxLength(500)
                     .IsUnicode(false);
-
                 entity.HasOne(d => d.IdPublicationNavigation)
                     .WithMany(p => p.Comentary)
                     .HasForeignKey(d => d.IdPublication)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Comentary_Publication");
-
                 entity.HasOne(d => d.IdUserNavigation)
                     .WithMany(p => p.Comentary)
                     .HasForeignKey(d => d.IdUser)
@@ -55,21 +54,16 @@ namespace SocialMedia.Infrastructure.Data
             modelBuilder.Entity<Publication>(entity =>
             {
                 entity.HasKey(e => e.Id);
-
                 entity.Property(e => e.Id)
                         .HasColumnName("IdPublication");
-
                 entity.Property(e => e.Date).HasColumnType("datetime");
-
                 entity.Property(e => e.Description)
                     .IsRequired()
                     .HasMaxLength(1000)
                     .IsUnicode(false);
-
                 entity.Property(e => e.Image)
                     .HasMaxLength(500)
                     .IsUnicode(false);
-
                 entity.HasOne(d => d.IdUserNavigation)
                     .WithMany(p => p.Publication)
                     .HasForeignKey(d => d.IdUser)
@@ -80,29 +74,51 @@ namespace SocialMedia.Infrastructure.Data
             modelBuilder.Entity<User>(entity =>
             {
                 entity.HasKey(e => e.Id);
-
                 entity.Property(e => e.Id)
                         .HasColumnName("IdUser");
-
                 entity.Property(e => e.Cellphone)
                     .HasMaxLength(10)
                     .IsUnicode(false);
-
                 entity.Property(e => e.DateNatal).HasColumnType("date");
-
                 entity.Property(e => e.Email)
                     .IsRequired()
                     .HasMaxLength(30)
                     .IsUnicode(false);
-
                 entity.Property(e => e.LastName)
                     .IsRequired()
                     .HasMaxLength(50)
                     .IsUnicode(false);
-
                 entity.Property(e => e.Names)
                     .IsRequired()
                     .HasMaxLength(50)
+                    .IsUnicode(false);
+            });
+
+            modelBuilder.Entity<Security>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.Id)
+                        .HasColumnName("Id");
+                entity.Property(e => e.UserSM)
+                    .HasColumnName("UserSM")
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+                entity.Property(e => e.UserName)
+                    .HasMaxLength(100)
+                    .IsRequired()
+                    .HasColumnName("UserName")
+                    .IsUnicode(false);
+                entity.Property(e => e.Password)
+                    .HasMaxLength(200)
+                    .IsRequired()
+                    .HasColumnName("Password")
+                    .IsUnicode(false);
+                entity.Property(e => e.Rol)
+                    .HasColumnName("Rol")
+                    .IsRequired()
+                    .HasMaxLength(15)
+                    .HasConversion(x => x.ToString(), x => (RolType)Enum.Parse(typeof(RolType), x))
                     .IsUnicode(false);
             });
         }

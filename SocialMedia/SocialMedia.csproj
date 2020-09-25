@@ -2,11 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+    <UserSecretsId>fdc16820-3ec5-4de5-b2e5-4c315eca3d59</UserSecretsId>
   </PropertyGroup>
-
-  <ItemGroup>
-    <Folder Include="Core\Enums\" />
-  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.0.1" />

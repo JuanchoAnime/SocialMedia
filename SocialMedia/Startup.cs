@@ -22,6 +22,7 @@ namespace SocialMedia
     using SocialMedia.Infrastructure.Data;
     using SocialMedia.Infrastructure.Filters;
     using SocialMedia.Infrastructure.Interfaces;
+    using SocialMedia.Infrastructure.Option;
     using SocialMedia.Infrastructure.Repositories;
     using SocialMedia.Infrastructure.Services;
 
@@ -46,13 +47,16 @@ namespace SocialMedia
                 options.UseSqlServer(Configuration.GetConnectionString("ApiContext"));
             });
             services.Configure<PaginationOptions>(Configuration.GetSection("Pagination"));
+            services.Configure<PasswordOptions>(Configuration.GetSection("PasswordOptions"));
 
             // Repositories
             services.AddTransient<IPublishRepository, PublishRepository>();
             services.AddTransient<IUserRepository, UserRepository>();
+            services.AddTransient<ISecurityRepository, SecurityRepository>();
 
             //Services
             services.AddTransient<IPublicationService, PublicationService>();
+            services.AddTransient<ISecurityService, SecurityService>();
             services.AddSingleton<IUriService>(provider =>
             {
                 var acceso = provider.GetRequiredService<IHttpContextAccessor>();
@@ -61,6 +65,7 @@ namespace SocialMedia
                 return new UriService(absoluteUri);
             });
             services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<IPasswordService, PasswordService>();
 
             services.AddSwaggerGen(swagger=> {
                 swagger.SwaggerDoc("v1", new OpenApiInfo { Title = "Social Media API", Version = "1" });

@@ -1,45 +1,47 @@
 ﻿namespace SocialMedia.Infrastructure.Controllers
 {
-    using System;
-    using System.Collections.Generic;
-    using System.IdentityModel.Tokens.Jwt;
-    using System.Linq;
-    using System.Security.Claims;
-    using System.Text;
-    using System.Threading.Tasks;
-    using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Configuration;
     using Microsoft.IdentityModel.Tokens;
     using SocialMedia.Core.Entities;
+    using SocialMedia.Core.Interfaces.Service;
+    using System;
+    using System.IdentityModel.Tokens.Jwt;
+    using System.Security.Claims;
+    using System.Text;
+    using System.Threading.Tasks;
 
     [Route("api/[controller]")]
     [ApiController]
     public class TokenController : ControllerBase
     {
         private readonly IConfiguration configuration;
+        private readonly ISecurityService securityService;
 
-        public TokenController(IConfiguration configuration)
+        public TokenController(IConfiguration configuration, ISecurityService securityService)
         {
             this.configuration = configuration;
+            this.securityService = securityService;
         }
 
         [HttpPost]
-        public IActionResult Authentication(UserLogin userLogin) 
+        public async Task<IActionResult> Authentication(UserLogin userLogin)
         {
-            if (ValidUser(userLogin))
+            var validation = await ValidUser(userLogin);
+            if (validation.Item1)
             {
-                return Ok(new { token = GenerateToken() });
+                return Ok(new { token = GenerateToken(validation.Item2) });
             }
-            return NotFound();
+            return Unauthorized();
         }
 
-        private bool ValidUser(UserLogin login) 
+        private async Task<(bool, Security)> ValidUser(UserLogin login)
         {
-            return true;
+            var user = await securityService.GetLoginByCredentials(login);
+            return (user != null, user);
         }
 
-        private string GenerateToken()
+        private string GenerateToken(Security security)
         {
             // Header
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Authentication:SecretKey"]));
@@ -47,9 +49,9 @@
             var header = new JwtHeader(credentials);
             //claims
             var claims = new[] {
-                new Claim(ClaimTypes.Name, "Judas"),
-                new Claim(ClaimTypes.Email, "judas3991@gmail.com"),
-                new Claim(ClaimTypes.Role, "Admin"),
+                new Claim(ClaimTypes.Name, security.UserName),
+                new Claim(ClaimTypes.Email, security.UserSM),
+                new Claim(ClaimTypes.Role, security.Rol.ToString()),
             };
             //payload
             var payLoad = new JwtPayload(
