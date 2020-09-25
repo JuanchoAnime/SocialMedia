@@ -32,7 +32,7 @@
             {
                 return Ok(new { token = GenerateToken(validation.Item2) });
             }
-            return Unauthorized();
+            return BadRequest();
         }
 
         private async Task<(bool, Security)> ValidUser(UserLogin login)
